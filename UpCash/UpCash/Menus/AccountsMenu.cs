@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace UpCash.Menus
 {
+    /// <summary> Меню счетов, служит для просмотрав счетов. </summary>
     internal class AccountsMenu : AMenu
     {
         public AccountsMenu(string title = null)

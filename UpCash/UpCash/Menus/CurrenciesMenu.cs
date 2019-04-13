@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace UpCash.Menus
 {
+    /// <summary> Меню валют, служит для настройки информации о валютах. </summary>
     internal class CurrenciesMenu : AMenu
     {
         public CurrenciesMenu(string title = null)

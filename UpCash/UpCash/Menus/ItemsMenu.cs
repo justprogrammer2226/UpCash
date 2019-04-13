@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace UpCash.Menus
 {
+    /// <summary> Меню статей, служит для настройки статей расхода и дохода. </summary>
     internal class ItemsMenu : AMenu
     {
         public ItemsMenu(string title = null)

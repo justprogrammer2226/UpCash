@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace UpCash.Menus
 {
+    /// <summary> Главное меню, служит для навигации по остальным меню. </summary>
     internal class MainMenu : AMenu
     {
         public MainMenu(string title = null)
@@ -14,10 +15,10 @@ namespace UpCash.Menus
 
             Options = new List<Option>()
             {
-                new Option("Посмотреть счета", ShowAccountsMenu),
-                new Option("Операции", ShowOperationsMenu),
-                new Option("Посмотреть валюты", ShowCurrenciesMenu),
-                new Option("Посмотреть статьи", ShowItemsMenu),
+                new Option("Посмотреть счета", () => ShowMenu(new AccountsMenu())),
+                new Option("Операции", () => ShowMenu(new OperationsMenu())),
+                new Option("Посмотреть валюты", () => ShowMenu(new CurrenciesMenu())),
+                new Option("Посмотреть статьи", () => ShowMenu(new ItemsMenu())),
                 new Option("Выход", () => menuAction = MenuActions.Back)
             };
 
@@ -52,28 +53,6 @@ namespace UpCash.Menus
             }
         }
 
-        private void ShowAccountsMenu()
-        {
-            AMenu accountsMenu = new AccountsMenu();
-            accountsMenu.Show();
-        }
-
-        private void ShowOperationsMenu()
-        {
-            AMenu operationsMenu = new OperationsMenu();
-            operationsMenu.Show();
-        }
-
-        private void ShowCurrenciesMenu()
-        {
-            AMenu currenciesMenu = new CurrenciesMenu();
-            currenciesMenu.Show();
-        }
-
-        private void ShowItemsMenu()
-        {
-            AMenu itemsMenu = new ItemsMenu();
-            itemsMenu.Show();
-        }
+        private void ShowMenu(AMenu menu) => menu.Show();
     }
 }
