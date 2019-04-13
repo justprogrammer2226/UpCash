@@ -61,10 +61,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Menus\CurrencyMenu.cs" />
+    <Compile Include="Menus\AccountsMenu.cs" />
+    <Compile Include="Menus\CurrenciesMenu.cs" />
     <Compile Include="Menus\AMenu.cs" />
+    <Compile Include="Menus\ItemsMenu.cs" />
     <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Menus\MenuActions.cs" />
+    <Compile Include="Menus\OperationsMenu.cs" />
     <Compile Include="Menus\Option.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

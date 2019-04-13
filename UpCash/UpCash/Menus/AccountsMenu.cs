@@ -6,19 +6,15 @@ using System.Threading.Tasks;
 
 namespace UpCash.Menus
 {
-    internal class MainMenu : AMenu
+    internal class AccountsMenu : AMenu
     {
-        public MainMenu(string title = null)
+        public AccountsMenu(string title = null)
         {
             Title = title;
 
             Options = new List<Option>()
             {
-                new Option("Посмотреть счета", ShowAccountsMenu),
-                new Option("Операции", ShowOperationsMenu),
-                new Option("Посмотреть валюты", ShowCurrenciesMenu),
-                new Option("Посмотреть статьи", ShowItemsMenu),
-                new Option("Выход", () => menuAction = MenuActions.Back)
+                new Option("Главное меню", () => menuAction = MenuActions.Back)
             };
 
             menuAction = MenuActions.Show;
@@ -27,7 +23,7 @@ namespace UpCash.Menus
         /// <summary> Показывает меню. </summary>
         public override void Show()
         {
-            while(true)
+            while (true)
             {
                 if (menuAction == MenuActions.Show)
                 {
@@ -48,32 +44,8 @@ namespace UpCash.Menus
                         Console.ReadKey();
                     }
                 }
-                else if (menuAction == MenuActions.Back) Environment.Exit(0);
+                else if (menuAction == MenuActions.Back) break;
             }
-        }
-
-        private void ShowAccountsMenu()
-        {
-            AMenu accountsMenu = new AccountsMenu();
-            accountsMenu.Show();
-        }
-
-        private void ShowOperationsMenu()
-        {
-            AMenu operationsMenu = new OperationsMenu();
-            operationsMenu.Show();
-        }
-
-        private void ShowCurrenciesMenu()
-        {
-            AMenu currenciesMenu = new CurrenciesMenu();
-            currenciesMenu.Show();
-        }
-
-        private void ShowItemsMenu()
-        {
-            AMenu itemsMenu = new ItemsMenu();
-            itemsMenu.Show();
         }
     }
 }

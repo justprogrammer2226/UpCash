@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace UpCash.Menus
 {
-    internal class CurrencyMenu : AMenu
+    internal class OperationsMenu : AMenu
     {
-        public CurrencyMenu(string title = null)
+        public OperationsMenu(string title = null)
         {
             Title = title;
 
             Options = new List<Option>()
             {
-                new Option("Вывести все валюты", () => ShowCurrencies()),
-                new Option("Настроить курс валют", () => AdjustCurrencyRate()),
                 new Option("Главное меню", () => menuAction = MenuActions.Back)
             };
 
@@ -25,7 +23,7 @@ namespace UpCash.Menus
         /// <summary> Показывает меню. </summary>
         public override void Show()
         {
-            while(true)
+            while (true)
             {
                 if (menuAction == MenuActions.Show)
                 {
@@ -48,16 +46,6 @@ namespace UpCash.Menus
                 }
                 else if (menuAction == MenuActions.Back) break;
             }
-        }
-
-        private void ShowCurrencies()
-        {
-
-        }
-
-        private void AdjustCurrencyRate()
-        {
-
         }
     }
 }
