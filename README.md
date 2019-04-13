@@ -1,5 +1,4 @@
-# UpCash
-## [For ISD]
+# UpCash [For ISD]
 UpCash is a program with minimal functionality to account for your income and expenses.
 
 The program meets you with a simple console interface with 5 options:
