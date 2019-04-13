@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,9 @@ namespace UpCash.Menus
 
             Options = new List<Option>()
             {
+                new Option("Показать счета", ShowAccounts),
+                new Option("Добавить счёт", ShowAddAccountMenu),
+                new Option("Удалить счёт", ShowDeleteAccountMenu),
                 new Option("Главное меню", () => menuAction = MenuActions.Back)
             };
 
@@ -47,6 +51,56 @@ namespace UpCash.Menus
                 }
                 else if (menuAction == MenuActions.Back) break;
             }
+        }
+
+        /// <summary> Показывает список аккаунтов. </summary>
+        private void ShowAccounts()
+        {
+            Console.Clear();
+
+            DataTable accounts = MyDataBase.GetTable("SELECT * FROM Account;");
+
+            for(int i = 0; i < accounts.Rows.Count; i++)
+                Console.WriteLine($"{i + 1}. {accounts.Rows[i][0].ToString()} - {accounts.Rows[i][1].ToString()} - {accounts.Rows[i][2].ToString()}");
+
+            Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
+            Console.ReadKey();
+        }
+
+        /// <summary> Показывает меню для добавления аккаунта. </summary>
+        private void ShowAddAccountMenu()
+        {
+            Console.Clear();
+
+            string accountName = Console.ReadLine();
+            double accountBalance = double.Parse(Console.ReadLine());
+            string accountCurrency = Console.ReadLine();
+
+            MyDataBase.ExecuteQueryWithoutAnswer($"INSERT INTO Account VALUES ('{accountName}', '{accountBalance}', '{accountCurrency}');");
+
+            Console.WriteLine("Аккаунт успешно добавлен.");
+            Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
+            Console.ReadKey();
+        }
+
+        /// <summary> Показывает меню для удаления аккаунта. </summary>
+        private void ShowDeleteAccountMenu()
+        {
+            Console.Clear();
+          
+            DataTable accounts = MyDataBase.GetTable("SELECT * FROM Account;");
+
+            for (int i = 0; i < accounts.Rows.Count; i++)
+                Console.WriteLine($"{i + 1}. {accounts.Rows[i][0].ToString()} - {accounts.Rows[i][1].ToString()} - {accounts.Rows[i][2].ToString()}");
+
+            Console.WriteLine("Введите имя счёта, который нужно удалить.");
+            string accountName = Console.ReadLine();
+
+            MyDataBase.ExecuteQueryWithoutAnswer($"DELETE FROM Account WHERE name = '{accountName}';");
+
+            Console.WriteLine("Аккаунт успешно удалён.");
+            Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
+            Console.ReadKey();
         }
     }
 }

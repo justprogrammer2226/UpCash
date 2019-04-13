@@ -15,7 +15,7 @@ namespace UpCash.Menus
 
             Options = new List<Option>()
             {
-                new Option("Посмотреть счета", () => ShowMenu(new AccountsMenu())),
+                new Option("Счета", () => ShowMenu(new AccountsMenu())),
                 new Option("Операции", () => ShowMenu(new OperationsMenu())),
                 new Option("Посмотреть валюты", () => ShowMenu(new CurrenciesMenu())),
                 new Option("Посмотреть статьи", () => ShowMenu(new ItemsMenu())),
