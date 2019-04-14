@@ -18,7 +18,7 @@ namespace UpCash.Menus
                 new Option("Счета", () => ShowMenu(new AccountsMenu())),
                 new Option("Операции", () => ShowMenu(new OperationsMenu())),
                 new Option("Посмотреть валюты", () => ShowMenu(new CurrenciesMenu())),
-                new Option("Посмотреть статьи", () => ShowMenu(new ItemsMenu())),
+                new Option("Статьи", () => ShowMenu(new ItemsMenu())),
                 new Option("Выход", () => menuAction = MenuActions.Back)
             };
 

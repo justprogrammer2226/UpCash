@@ -62,7 +62,7 @@ namespace UpCash
             OpenConnection();
 
             command.CommandText = query;
-            var answer = command.ExecuteScalar().ToString();
+            var answer = command.ExecuteScalar();
 
             CloseConnection();
 
