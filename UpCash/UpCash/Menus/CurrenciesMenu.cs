@@ -15,8 +15,8 @@ namespace UpCash.Menus
 
             Options = new List<Option>()
             {
-                new Option("Вывести все валюты", () => ShowCurrencies()),
-                new Option("Настроить курс валют", () => AdjustCurrencyRate()),
+                new Option("Вывести все валюты", () => menuAction = MenuActions.Back),
+                new Option("Настроить курс валют", () => menuAction = MenuActions.Back),
                 new Option("Главное меню", () => menuAction = MenuActions.Back)
             };
 
@@ -49,16 +49,6 @@ namespace UpCash.Menus
                 }
                 else if (menuAction == MenuActions.Back) break;
             }
-        }
-
-        private void ShowCurrencies()
-        {
-
-        }
-
-        private void AdjustCurrencyRate()
-        {
-
         }
     }
 }

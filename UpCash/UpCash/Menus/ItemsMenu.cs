@@ -55,6 +55,8 @@ namespace UpCash.Menus
             }
         }
 
+        /// <summary> Показывает статьи типа type. </summary>
+        /// <param name="type"> Тип статьи, которую нужно показать. </param>
         private void ShowItems(string type)
         {
             Console.Clear();
@@ -78,6 +80,8 @@ namespace UpCash.Menus
             Console.ReadKey();
         }
 
+        /// <summary> Открывает меню добавление элемента в статью типа type. </summary>
+        /// <param name="type"> Тип статьи, в которую нужно добавить элемент. </param>
         private void ShowAddItemMenu(string type)
         {
             Console.Clear();
@@ -122,6 +126,7 @@ namespace UpCash.Menus
             Console.ReadKey();
         }
 
+        /// <summary> Поазывает меню удаления удаления статьи. </summary>
         private void ShowDeleteItemMenu()
         {
             Console.Clear();
