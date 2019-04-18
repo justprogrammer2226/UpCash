@@ -25,10 +25,15 @@ namespace UpCash.Menus
                 {
                     Console.Clear();
 
-                    if (Title != null) Console.WriteLine(Title);
+                    if (Title != null)
+                    {
+                        Console.WriteLine(Title);
+                    }
 
                     for (int i = 0; i < Options.Count; i++)
+                    {
                         Console.WriteLine($"{i + 1}. {Options[i].Name}");
+                    }
 
                     if (int.TryParse(Console.ReadLine(), out int indexSelectedOption) && indexSelectedOption >= 1 && indexSelectedOption <= Options.Count)
                     {
@@ -40,7 +45,10 @@ namespace UpCash.Menus
                         Console.ReadKey();
                     }
                 }
-                else if (MenuAction == MenuActions.Back) break;
+                else if (MenuAction == MenuActions.Back)
+                {
+                    break;
+                }
             }
         }
     }

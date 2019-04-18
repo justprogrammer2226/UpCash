@@ -40,7 +40,9 @@ namespace UpCash.Menus
                 DataTable subItems = MyDataBase.GetDB().GetTable($"SELECT * FROM SubItem WHERE name_item = '{items.Rows[i][0].ToString()}';");
 
                 for (int j = 0; j < subItems.Rows.Count; j++)
+                {
                     Console.WriteLine($"  {i + 1}.{j + 1}. {subItems.Rows[j][0].ToString()}");
+                }
             }
 
             Console.WriteLine("Нажмите любую клавишу, что б вернуться.");

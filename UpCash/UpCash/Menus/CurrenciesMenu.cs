@@ -29,7 +29,9 @@ namespace UpCash.Menus
             DataTable currencies = MyDataBase.GetDB().GetTable("SELECT * FROM Currency;");
 
             for(int i = 0; i < currencies.Rows.Count; i++)
+            {
                 Console.WriteLine($"{i + 1}. {currencies.Rows[i][0].ToString()} - {currencies.Rows[i][1].ToString()}");
+            }
 
             Console.WriteLine("Нажмите любую клавишу, что б вернуться.");
             Console.ReadKey();
@@ -43,7 +45,9 @@ namespace UpCash.Menus
             DataTable currencies = MyDataBase.GetDB().GetTable("SELECT * FROM Currency;");
 
             for (int i = 0; i < currencies.Rows.Count; i++)
+            {
                 Console.WriteLine($"{i + 1}. {currencies.Rows[i][0].ToString()} - {currencies.Rows[i][1].ToString()}");
+            }
 
             Console.WriteLine("Нажмите любую клавишу, что б вернуться.");
             Console.ReadKey();

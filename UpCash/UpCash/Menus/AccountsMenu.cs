@@ -28,7 +28,9 @@ namespace UpCash.Menus
             DataTable accounts = MyDataBase.GetDB().GetTable("SELECT * FROM Account;");
 
             for(int i = 0; i < accounts.Rows.Count; i++)
+            {
                 Console.WriteLine($"{i + 1}. {accounts.Rows[i][0].ToString()} - {accounts.Rows[i][1].ToString()} - {accounts.Rows[i][2].ToString()}");
+            }
 
             Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
             Console.ReadKey();
@@ -58,7 +60,9 @@ namespace UpCash.Menus
             DataTable accounts = MyDataBase.GetDB().GetTable("SELECT * FROM Account;");
 
             for (int i = 0; i < accounts.Rows.Count; i++)
+            {
                 Console.WriteLine($"{i + 1}. {accounts.Rows[i][0].ToString()} - {accounts.Rows[i][1].ToString()} - {accounts.Rows[i][2].ToString()}");
+            }
 
             Console.WriteLine("Введите имя счёта, который нужно удалить.");
             string accountName = Console.ReadLine();
