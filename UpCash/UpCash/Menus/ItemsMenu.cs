@@ -18,38 +18,8 @@ namespace UpCash.Menus
                 new Option("Добавить статью дохода", () => ShowAddItemMenu("Доход")),
                 new Option("Добавить статью расхода", () => ShowAddItemMenu("Расход")),
                 new Option("Удалить статью", ShowDeleteItemMenu),
-                new Option("Главное меню", () => menuAction = MenuActions.Back)
+                new Option("Главное меню", () => MenuAction = MenuActions.Back)
             };
-
-            menuAction = MenuActions.Show;
-        }
-
-        /// <summary> Показывает меню. </summary>
-        public override void Show()
-        {
-            while (true)
-            {
-                if (menuAction == MenuActions.Show)
-                {
-                    Console.Clear();
-
-                    if (Title != null) Console.WriteLine(Title);
-
-                    for (int i = 0; i < Options.Count; i++)
-                        Console.WriteLine($"{i + 1}. {Options[i].Name}");
-
-                    if (int.TryParse(Console.ReadLine(), out int indexSelectedOption) && indexSelectedOption >= 1 && indexSelectedOption <= Options.Count)
-                    {
-                        Options[indexSelectedOption - 1].Action();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Данной опции не существует.");
-                        Console.ReadKey();
-                    }
-                }
-                else if (menuAction == MenuActions.Back) break;
-            }
         }
 
         /// <summary> Показывает статьи типа type. </summary>

@@ -15,40 +15,10 @@ namespace UpCash.Menus
             {
                 new Option("Вывести все валюты", ShowCurrencies),
                 new Option("Добавить валюту", ShowAddCurrencyMenu),
-                new Option("Удалить валюту", () => menuAction = MenuActions.Back),
-                new Option("Настроить курс валют", () => menuAction = MenuActions.Back),
-                new Option("Главное меню", () => menuAction = MenuActions.Back)
+                new Option("Удалить валюту", () => MenuAction = MenuActions.Back),
+                new Option("Настроить курс валют", () => MenuAction = MenuActions.Back),
+                new Option("Главное меню", () => MenuAction = MenuActions.Back)
             };
-
-            menuAction = MenuActions.Show;
-        }
-
-        /// <summary> Показывает меню. </summary>
-        public override void Show()
-        {
-            while(true)
-            {
-                if (menuAction == MenuActions.Show)
-                {
-                    Console.Clear();
-
-                    if (Title != null) Console.WriteLine(Title);
-
-                    for (int i = 0; i < Options.Count; i++)
-                        Console.WriteLine($"{i + 1}. {Options[i].Name}");
-
-                    if (int.TryParse(Console.ReadLine(), out int indexSelectedOption) && indexSelectedOption >= 1 && indexSelectedOption <= Options.Count)
-                    {
-                        Options[indexSelectedOption - 1].Action();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Данной опции не существует.");
-                        Console.ReadKey();
-                    }
-                }
-                else if (menuAction == MenuActions.Back) break;
-            }
         }
 
         private void ShowCurrencies()

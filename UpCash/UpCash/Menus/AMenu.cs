@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace UpCash.Menus
 {
@@ -12,9 +13,35 @@ namespace UpCash.Menus
         public List<Option> Options { get; protected set; }
 
         /// <summary> Действие, которое должно выполнить меню сейчас. </summary>
-        public MenuActions menuAction { get; protected set; }
+        public MenuActions MenuAction { get; protected set; }
 
         /// <summary> Показать меню. </summary>
-        public abstract void Show();
+        public virtual void Show()
+        {
+            MenuAction = MenuActions.Show;
+            while (true)
+            {
+                if (MenuAction == MenuActions.Show)
+                {
+                    Console.Clear();
+
+                    if (Title != null) Console.WriteLine(Title);
+
+                    for (int i = 0; i < Options.Count; i++)
+                        Console.WriteLine($"{i + 1}. {Options[i].Name}");
+
+                    if (int.TryParse(Console.ReadLine(), out int indexSelectedOption) && indexSelectedOption >= 1 && indexSelectedOption <= Options.Count)
+                    {
+                        Options[indexSelectedOption - 1].Action();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Данной опции не существует.");
+                        Console.ReadKey();
+                    }
+                }
+                else if (MenuAction == MenuActions.Back) break;
+            }
+        }
     }
 }
