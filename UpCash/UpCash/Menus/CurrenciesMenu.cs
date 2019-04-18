@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data;
 
 namespace UpCash.Menus
 {
@@ -15,7 +13,9 @@ namespace UpCash.Menus
 
             Options = new List<Option>()
             {
-                new Option("Вывести все валюты", () => menuAction = MenuActions.Back),
+                new Option("Вывести все валюты", ShowCurrencies),
+                new Option("Добавить валюту", ShowAddCurrencyMenu),
+                new Option("Удалить валюту", () => menuAction = MenuActions.Back),
                 new Option("Настроить курс валют", () => menuAction = MenuActions.Back),
                 new Option("Главное меню", () => menuAction = MenuActions.Back)
             };
@@ -49,6 +49,34 @@ namespace UpCash.Menus
                 }
                 else if (menuAction == MenuActions.Back) break;
             }
+        }
+
+        private void ShowCurrencies()
+        {
+            Console.Clear();
+            Console.WriteLine("Список валют:");
+
+            DataTable currencies = MyDataBase.GetDB().GetTable("SELECT * FROM Currency;");
+
+            for(int i = 0; i < currencies.Rows.Count; i++)
+                Console.WriteLine($"{i + 1}. {currencies.Rows[i][0].ToString()} - {currencies.Rows[i][1].ToString()}");
+
+            Console.WriteLine("Нажмите любую клавишу, что б вернуться.");
+            Console.ReadKey();
+        }
+
+        private void ShowAddCurrencyMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("Список валют:");
+
+            DataTable currencies = MyDataBase.GetDB().GetTable("SELECT * FROM Currency;");
+
+            for (int i = 0; i < currencies.Rows.Count; i++)
+                Console.WriteLine($"{i + 1}. {currencies.Rows[i][0].ToString()} - {currencies.Rows[i][1].ToString()}");
+
+            Console.WriteLine("Нажмите любую клавишу, что б вернуться.");
+            Console.ReadKey();
         }
     }
 }

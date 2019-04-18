@@ -55,7 +55,7 @@ namespace UpCash.Menus
         {
             Console.Clear();
 
-            DataTable accounts = MyDataBase.GetTable("SELECT * FROM Account;");
+            DataTable accounts = MyDataBase.GetDB().GetTable("SELECT * FROM Account;");
 
             for(int i = 0; i < accounts.Rows.Count; i++)
                 Console.WriteLine($"{i + 1}. {accounts.Rows[i][0].ToString()} - {accounts.Rows[i][1].ToString()} - {accounts.Rows[i][2].ToString()}");
@@ -73,7 +73,7 @@ namespace UpCash.Menus
             double accountBalance = double.Parse(Console.ReadLine());
             string accountCurrency = Console.ReadLine();
 
-            MyDataBase.ExecuteQueryWithoutAnswer($"INSERT INTO Account VALUES ('{accountName}', '{accountBalance}', '{accountCurrency}');");
+            MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"INSERT INTO Account VALUES ('{accountName}', '{accountBalance}', '{accountCurrency}');");
 
             Console.WriteLine("Аккаунт успешно добавлен.");
             Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
@@ -85,7 +85,7 @@ namespace UpCash.Menus
         {
             Console.Clear();
           
-            DataTable accounts = MyDataBase.GetTable("SELECT * FROM Account;");
+            DataTable accounts = MyDataBase.GetDB().GetTable("SELECT * FROM Account;");
 
             for (int i = 0; i < accounts.Rows.Count; i++)
                 Console.WriteLine($"{i + 1}. {accounts.Rows[i][0].ToString()} - {accounts.Rows[i][1].ToString()} - {accounts.Rows[i][2].ToString()}");
@@ -93,7 +93,7 @@ namespace UpCash.Menus
             Console.WriteLine("Введите имя счёта, который нужно удалить.");
             string accountName = Console.ReadLine();
 
-            MyDataBase.ExecuteQueryWithoutAnswer($"DELETE FROM Account WHERE name = '{accountName}';");
+            MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"DELETE FROM Account WHERE name = '{accountName}';");
 
             Console.WriteLine("Аккаунт успешно удалён.");
             Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");

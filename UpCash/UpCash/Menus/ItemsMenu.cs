@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UpCash.Menus
 {
@@ -63,14 +60,14 @@ namespace UpCash.Menus
             Console.WriteLine($"Статьи типа {type.ToLower()}:");
 
             // Если пунктов нет, то вернёт объект, с 0 строк, а не null.
-            DataTable items = MyDataBase.GetTable($"SELECT * FROM Item WHERE type_item = '{type}';");
+            DataTable items = MyDataBase.GetDB().GetTable($"SELECT * FROM Item WHERE type_item = '{type}';");
 
             for (int i = 0; i < items.Rows.Count; i++)
             {
                 Console.WriteLine($"{i + 1}. {items.Rows[i][0].ToString()}");
 
                 // Если подпунктов нет, то вернёт объект, с 0 строк, а не null.
-                DataTable subItems = MyDataBase.GetTable($"SELECT * FROM SubItem WHERE name_item = '{items.Rows[i][0].ToString()}';");
+                DataTable subItems = MyDataBase.GetDB().GetTable($"SELECT * FROM SubItem WHERE name_item = '{items.Rows[i][0].ToString()}';");
 
                 for (int j = 0; j < subItems.Rows.Count; j++)
                     Console.WriteLine($"  {i + 1}.{j + 1}. {subItems.Rows[j][0].ToString()}");
@@ -95,15 +92,15 @@ namespace UpCash.Menus
 
             if (string.IsNullOrEmpty(mainItemName))
             {
-                MyDataBase.ExecuteQueryWithoutAnswer($"INSERT INTO Item VALUES ('{itemName}', '{type}');");
+                MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"INSERT INTO Item VALUES ('{itemName}', '{type}');");
             }
             else
             {
-                string typeOfMainItem = MyDataBase.ExecuteQueryWithAnswer($"SELECT type_item FROM Item WHERE name_item = '{mainItemName}'");
+                string typeOfMainItem = MyDataBase.GetDB().ExecuteQueryWithAnswer($"SELECT type_item FROM Item WHERE name_item = '{mainItemName}'");
 
-                if (MyDataBase.ExecuteQueryWithAnswer($"SELECT type_item FROM Item WHERE name_item = '{mainItemName}'") == type)
+                if (MyDataBase.GetDB().ExecuteQueryWithAnswer($"SELECT type_item FROM Item WHERE name_item = '{mainItemName}'") == type)
                 {
-                    MyDataBase.ExecuteQueryWithoutAnswer($"INSERT INTO SubItem VALUES ('{itemName}', '{mainItemName}');");
+                    MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"INSERT INTO SubItem VALUES ('{itemName}', '{mainItemName}');");
                 }
                 else if (typeOfMainItem == null)
                 {
@@ -134,7 +131,7 @@ namespace UpCash.Menus
 
             string itemName = Console.ReadLine();
 
-            bool isItemExist = MyDataBase.ExecuteQueryWithAnswer($"SELECT name_item FROM Item WHERE name_item = '{itemName}';") != null ? true : false;
+            bool isItemExist = MyDataBase.GetDB().ExecuteQueryWithAnswer($"SELECT name_item FROM Item WHERE name_item = '{itemName}';") != null ? true : false;
 
             if (isItemExist)
             {
@@ -144,8 +141,8 @@ namespace UpCash.Menus
 
                 if (input == "+")
                 {
-                    MyDataBase.ExecuteQueryWithoutAnswer($"DELETE FROM SubItem WHERE name_item = '{itemName}'");
-                    MyDataBase.ExecuteQueryWithoutAnswer($"DELETE FROM Item WHERE name_item = '{itemName}'");
+                    MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"DELETE FROM SubItem WHERE name_item = '{itemName}'");
+                    MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"DELETE FROM Item WHERE name_item = '{itemName}'");
                 }
                 else
                 {
@@ -154,11 +151,11 @@ namespace UpCash.Menus
             }
             else
             {
-                bool isSubItemExist = MyDataBase.ExecuteQueryWithAnswer($"SELECT name_sub_item FROM SubItem WHERE name_sub_item = '{itemName}';") != null ? true : false;
+                bool isSubItemExist = MyDataBase.GetDB().ExecuteQueryWithAnswer($"SELECT name_sub_item FROM SubItem WHERE name_sub_item = '{itemName}';") != null ? true : false;
 
                 if (isSubItemExist)
                 {
-                    MyDataBase.ExecuteQueryWithoutAnswer($"DELETE FROM SubItem WHERE name_item = '{itemName}'");
+                    MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"DELETE FROM SubItem WHERE name_item = '{itemName}'");
                 }
                 else
                 {

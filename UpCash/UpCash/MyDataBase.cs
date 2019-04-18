@@ -1,23 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace UpCash
 {
-
-    internal static class MyDataBase
+    internal class MyDataBase
     {
-        private static SQLiteConnection connection;
-        private static SQLiteCommand command;
+        private const string DBName = "UpCash.sqlite";
+        private static MyDataBase _instance;
+        private static SQLiteConnection _connection;
+        private static SQLiteCommand _command;
 
-        public const string DBName = "UpCash.sqlite";
-
-        static MyDataBase()
+        private MyDataBase()
         {
             if (!File.Exists(DBName))
             {
@@ -26,30 +22,37 @@ namespace UpCash
             }
         }
 
+        /// <summary> Возвращает объект базы данных. </summary>
+        public static MyDataBase GetDB()
+        {
+            if (_instance == null) _instance = new MyDataBase();
+            return _instance;
+        }
+
         /// <summary> Этот метод открывает подключение БД. </summary>
         /// <remarks> Перед открытием подключения, нужно указать DBName. </remarks>
-        private static void OpenConnection()
+        private void OpenConnection()
         {
-            connection = new SQLiteConnection("Data Source=" + DBName);
-            command = new SQLiteCommand(connection);
-            connection.Open();
+            _connection = new SQLiteConnection("Data Source=" + DBName);
+            _command = new SQLiteCommand(_connection);
+            _connection.Open();
         }
 
         /// <summary> Этот метод закрывает подключение к БД. </summary>
-        public static void CloseConnection()
+        public void CloseConnection()
         {
-            connection.Close();
-            command.Dispose();
+            _connection.Close();
+            _command.Dispose();
         }
 
         /// <summary> Этот метод выполняет запрос query. </summary>
         /// <param name="query"> Собственно запрос. </param>
-        public static void ExecuteQueryWithoutAnswer(string query)
+        public void ExecuteQueryWithoutAnswer(string query)
         {
             OpenConnection();
 
-            command.CommandText = query;
-            command.ExecuteNonQuery();
+            _command.CommandText = query;
+            _command.ExecuteNonQuery();
 
             CloseConnection();
         }
@@ -57,12 +60,12 @@ namespace UpCash
         /// <summary> Этот метод выполняет запрос query и возвращает ответ запроса. </summary>
         /// <param name="query"> Собственно запрос. </param>
         /// <returns> Возвращает значение 1 строки 1 стобца, если оно имееться. </returns>
-        public static string ExecuteQueryWithAnswer(string query)
+        public string ExecuteQueryWithAnswer(string query)
         {
             OpenConnection();
 
-            command.CommandText = query;
-            var answer = command.ExecuteScalar();
+            _command.CommandText = query;
+            object answer = _command.ExecuteScalar();
 
             CloseConnection();
 
@@ -72,19 +75,18 @@ namespace UpCash
 
         /// <summary> Этот метод возваращает таблицу, которая являеться результатом выборки запроса query. </summary>
         /// <param name="query"> Собственно запрос. </param>
-        public static DataTable GetTable(string query)
+        public DataTable GetTable(string query)
         {
             OpenConnection();
 
-            SQLiteDataAdapter adapter = new SQLiteDataAdapter(query, connection);
-
-            DataSet DS = new DataSet();
-            adapter.Fill(DS);
-            adapter.Dispose();
+            DataTable table = new DataTable();
+            using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(query, _connection))
+            {
+                adapter.Fill(table);
+            }
 
             CloseConnection();
-
-            return DS.Tables[0];
+            return table;
         }
     }
 }
