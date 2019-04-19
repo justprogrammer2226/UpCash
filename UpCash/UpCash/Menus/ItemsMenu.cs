@@ -7,10 +7,10 @@ namespace UpCash.Menus
     /// <summary> Меню статей, служит для настройки статей расхода и дохода. </summary>
     internal class ItemsMenu : AMenu
     {
-        public ItemsMenu(string title = null)
-        {
-            Title = title;
+        private static ItemsMenu _instance;
 
+        private ItemsMenu()
+        {
             Options = new List<Option>()
             {
                 new Option("Посмотреть статьи доходов", () => ShowItems("Доход")),
@@ -20,6 +20,12 @@ namespace UpCash.Menus
                 new Option("Удалить статью", ShowDeleteItemMenu),
                 new Option("Главное меню", () => MenuAction = MenuActions.Back)
             };
+        }
+
+        public static ItemsMenu GetMenu()
+        {
+            if (_instance == null) _instance = new ItemsMenu();
+            return _instance;
         }
 
         /// <summary> Показывает статьи типа type. </summary>

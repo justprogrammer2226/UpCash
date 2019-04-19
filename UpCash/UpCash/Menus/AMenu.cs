@@ -25,7 +25,7 @@ namespace UpCash.Menus
                 {
                     Console.Clear();
 
-                    if (Title != null)
+                    if (!string.IsNullOrEmpty(Title))
                     {
                         Console.WriteLine(Title);
                     }
@@ -50,6 +50,13 @@ namespace UpCash.Menus
                     break;
                 }
             }
+        }
+
+        /// <summary> Устанавливает заголовок для меню. </summary>
+        /// <param name="title"> Заголовок меню. </param>
+        public void SetTitle(string title)
+        {
+            Title = title;
         }
     }
 }

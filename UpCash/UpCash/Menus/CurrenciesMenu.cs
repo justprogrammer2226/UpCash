@@ -7,10 +7,10 @@ namespace UpCash.Menus
     /// <summary> Меню валют, служит для настройки информации о валютах. </summary>
     internal class CurrenciesMenu : AMenu
     {
-        public CurrenciesMenu(string title = null)
-        {
-            Title = title;
+        private static CurrenciesMenu _instance;
 
+        private CurrenciesMenu()
+        {
             Options = new List<Option>()
             {
                 new Option("Вывести все валюты", ShowCurrencies),
@@ -19,6 +19,12 @@ namespace UpCash.Menus
                 new Option("Настроить курс валют", () => MenuAction = MenuActions.Back),
                 new Option("Главное меню", () => MenuAction = MenuActions.Back)
             };
+        }
+
+        public static CurrenciesMenu GetMenu()
+        {
+            if (_instance == null) _instance = new CurrenciesMenu();
+            return _instance;
         }
 
         private void ShowCurrencies()

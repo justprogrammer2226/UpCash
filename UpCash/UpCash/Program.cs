@@ -6,7 +6,7 @@ namespace UpCash
     {
         static void Main(string[] args)
         {
-            AMenu mainMenu = new MainMenu();
+            AMenu mainMenu = MainMenu.GetMenu();
             mainMenu.Show();
         }
     }

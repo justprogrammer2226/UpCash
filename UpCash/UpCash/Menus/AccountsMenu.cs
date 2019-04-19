@@ -7,10 +7,10 @@ namespace UpCash.Menus
     /// <summary> Меню счетов, служит для просмотрав счетов. </summary>
     internal class AccountsMenu : AMenu
     {
-        public AccountsMenu(string title = null)
-        {
-            Title = title;
+        private static AccountsMenu _instance;
 
+        private AccountsMenu()
+        {
             Options = new List<Option>()
             {
                 new Option("Показать счета", ShowAccounts),
@@ -19,6 +19,12 @@ namespace UpCash.Menus
                 new Option("Главное меню", () => MenuAction = MenuActions.Back)
             };
         }
+
+        public static AccountsMenu GetMenu()
+        {
+            if (_instance == null) _instance = new AccountsMenu();
+            return _instance;
+        }     
 
         /// <summary> Показывает список аккаунтов. </summary>
         private void ShowAccounts()
