@@ -65,12 +65,11 @@ namespace UpCash
             OpenConnection();
 
             _command.CommandText = query;
-            object answer = _command.ExecuteScalar();
+            string answer = _command.ExecuteScalar() as string;
 
             CloseConnection();
 
-            if (answer != null) return answer.ToString();
-            else return null;
+            return answer;
         }
 
         /// <summary> Этот метод возваращает таблицу, которая являеться результатом выборки запроса query. </summary>

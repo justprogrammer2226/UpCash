@@ -26,11 +26,11 @@ namespace UpCash.Menus
             Console.Clear();
             Console.WriteLine("Список валют:");
 
-            DataTable currencies = MyDataBase.GetDB().GetTable("SELECT * FROM Currency;");
+            DataTable currencies = MyDataBase.GetDB().GetTable("SELECT code, name FROM Currency;");
 
             for(int i = 0; i < currencies.Rows.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {currencies.Rows[i][0].ToString()} - {currencies.Rows[i][1].ToString()}");
+                Console.WriteLine($"{i + 1}. {currencies.Rows[i]["code"].ToString()} - {currencies.Rows[i]["name"].ToString()}");
             }
 
             Console.WriteLine("Нажмите любую клавишу, что б вернуться.");
@@ -42,12 +42,14 @@ namespace UpCash.Menus
             Console.Clear();
             Console.WriteLine("Список валют:");
 
-            DataTable currencies = MyDataBase.GetDB().GetTable("SELECT * FROM Currency;");
+            DataTable currencies = MyDataBase.GetDB().GetTable("SELECT code, name FROM Currency;");
 
             for (int i = 0; i < currencies.Rows.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {currencies.Rows[i][0].ToString()} - {currencies.Rows[i][1].ToString()}");
+                Console.WriteLine($"{i + 1}. {currencies.Rows[i]["code"].ToString()} - {currencies.Rows[i]["name"].ToString()}");
             }
+
+            // TODO: Реализуй добавление валюты
 
             Console.WriteLine("Нажмите любую клавишу, что б вернуться.");
             Console.ReadKey();

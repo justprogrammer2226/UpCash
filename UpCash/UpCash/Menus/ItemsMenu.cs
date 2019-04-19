@@ -30,18 +30,18 @@ namespace UpCash.Menus
             Console.WriteLine($"Статьи типа {type.ToLower()}:");
 
             // Если пунктов нет, то вернёт объект, с 0 строк, а не null.
-            DataTable items = MyDataBase.GetDB().GetTable($"SELECT * FROM Item WHERE type_item = '{type}';");
+            DataTable items = MyDataBase.GetDB().GetTable($"SELECT name_item FROM Item WHERE type_item = '{type}';");
 
             for (int i = 0; i < items.Rows.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {items.Rows[i][0].ToString()}");
+                Console.WriteLine($"{i + 1}. {items.Rows[i]["name_item"].ToString()}");
 
                 // Если подпунктов нет, то вернёт объект, с 0 строк, а не null.
-                DataTable subItems = MyDataBase.GetDB().GetTable($"SELECT * FROM SubItem WHERE name_item = '{items.Rows[i][0].ToString()}';");
+                DataTable subItems = MyDataBase.GetDB().GetTable($"SELECT name_sub_item FROM SubItem WHERE name_item = '{items.Rows[i]["name_item"].ToString()}';");
 
                 for (int j = 0; j < subItems.Rows.Count; j++)
                 {
-                    Console.WriteLine($"  {i + 1}.{j + 1}. {subItems.Rows[j][0].ToString()}");
+                    Console.WriteLine($"  {i + 1}.{j + 1}. {subItems.Rows[j]["name_sub_item"].ToString()}");
                 }
             }
 

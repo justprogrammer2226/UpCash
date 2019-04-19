@@ -25,11 +25,11 @@ namespace UpCash.Menus
         {
             Console.Clear();
 
-            DataTable accounts = MyDataBase.GetDB().GetTable("SELECT * FROM Account;");
+            DataTable accounts = MyDataBase.GetDB().GetTable("SELECT name, balance, currency FROM Account;");
 
             for(int i = 0; i < accounts.Rows.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {accounts.Rows[i][0].ToString()} - {accounts.Rows[i][1].ToString()} - {accounts.Rows[i][2].ToString()}");
+                Console.WriteLine($"{i + 1}. {accounts.Rows[i]["name"].ToString()} - {accounts.Rows[i]["balance"].ToString()} - {accounts.Rows[i]["currency"].ToString()}");
             }
 
             Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
@@ -56,12 +56,12 @@ namespace UpCash.Menus
         private void ShowDeleteAccountMenu()
         {
             Console.Clear();
-          
-            DataTable accounts = MyDataBase.GetDB().GetTable("SELECT * FROM Account;");
+
+            DataTable accounts = MyDataBase.GetDB().GetTable("SELECT name, balance, currency FROM Account;");
 
             for (int i = 0; i < accounts.Rows.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {accounts.Rows[i][0].ToString()} - {accounts.Rows[i][1].ToString()} - {accounts.Rows[i][2].ToString()}");
+                Console.WriteLine($"{i + 1}. {accounts.Rows[i]["name"].ToString()} - {accounts.Rows[i]["balance"].ToString()} - {accounts.Rows[i]["currency"].ToString()}");
             }
 
             Console.WriteLine("Введите имя счёта, который нужно удалить.");
