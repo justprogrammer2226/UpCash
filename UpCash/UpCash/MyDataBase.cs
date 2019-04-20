@@ -33,7 +33,7 @@ namespace UpCash
         /// <remarks> Перед открытием подключения, нужно указать DBName. </remarks>
         private void OpenConnection()
         {
-            _connection = new SQLiteConnection("Data Source=" + DBName);
+            _connection = new SQLiteConnection("Data Source=" + DBName + "; foreign keys=true;");
             _command = new SQLiteCommand(_connection);
             _connection.Open();
         }
