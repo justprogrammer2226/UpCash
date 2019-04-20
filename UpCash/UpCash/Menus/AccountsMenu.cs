@@ -5,7 +5,7 @@ using System.Data.SQLite;
 
 namespace UpCash.Menus
 {
-    /// <summary> Меню счётов, служит для просмотрав счётов. </summary>
+    /// <summary> Меню счётов, служит для просмотра счётов и управления ними. </summary>
     internal class AccountsMenu : AMenu
     {
         private static AccountsMenu _instance;
@@ -14,7 +14,7 @@ namespace UpCash.Menus
         {
             Options = new List<Option>()
             {
-                new Option("Показать счёта", ShowAccountsOutputMenu),
+                new Option("Показать счёта", ShowListOfAccounts),
                 new Option("Добавить счёт", ShowAddAccountMenu),
                 new Option("Удалить счёт", ShowDeleteAccountMenu),
                 new Option("Главное меню", () => MenuAction = MenuActions.Back)
@@ -28,13 +28,12 @@ namespace UpCash.Menus
             return _instance;
         }
 
+        #region Implementing menu options
         /// <summary> Показывает меню списка счётов. </summary>
-        private void ShowAccountsOutputMenu()
+        private void ShowListOfAccounts()
         {
             Console.Clear();
-
             ShowAccounts();
-
             Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
             Console.ReadKey();
         }
@@ -42,7 +41,7 @@ namespace UpCash.Menus
         /// <summary> Показывает меню для добавления счёта. </summary>
         private void ShowAddAccountMenu()
         {
-            while(true)
+            while (true)
             {
                 Console.Clear();
 
@@ -71,14 +70,12 @@ namespace UpCash.Menus
         private void ShowDeleteAccountMenu()
         {
             Console.Clear();
-            string accountName = GetAccountName();
-
-            MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"DELETE FROM Account WHERE name = '{accountName}';");
-
+            MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"DELETE FROM Account WHERE name = '{GetAccountName()}';");
             Console.WriteLine("Счёт успешно удалён.");
             Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
             Console.ReadKey();
         }
+        #endregion
 
         /// <summary> Выводит список всех счётов. </summary>
         private void ShowAccounts()
@@ -117,14 +114,6 @@ namespace UpCash.Menus
             return accountName;
         }
 
-        /// <summary> Проверяет валидное ли имя для счёта. </summary>
-        /// <param name="accountName"> Имя счёта. </param>
-        /// <returns> Возращает true, если имя счёта валидное, иначе false. </returns>
-        private bool IsValidAccountName(string accountName)
-        {
-            return !string.IsNullOrEmpty(accountName);
-        }
-
         /// <summary> Возращает баланс счёта, введённого пользователем. </summary>
         private double GetAccounBalance()
         {
@@ -150,15 +139,6 @@ namespace UpCash.Menus
                 }
             }
             return balance;
-        }
-
-        /// <summary> Проверяет валидный ли балан для счёта. </summary>
-        /// <param name="accountBalance"> Баланс аккаунта. </param>
-        /// <param name="balance"> Баланс аккаунта типа double, если строка с балансом валидная. </param>
-        /// <returns> Возращает true, если баланс счёта валидный, иначе false. </returns>
-        private bool IsValidAccountBalance(string accountBalance, out double balance)
-        {
-            return double.TryParse(accountBalance, out balance);
         }
 
         /// <summary> Возращает валюту счёта, введённого пользователем. </summary>
@@ -188,6 +168,24 @@ namespace UpCash.Menus
             return accountCurrency;
         }
 
+        #region Validation
+        /// <summary> Проверяет валидное ли имя для счёта. </summary>
+        /// <param name="accountName"> Имя счёта. </param>
+        /// <returns> Возращает true, если имя счёта валидное, иначе false. </returns>
+        private bool IsValidAccountName(string accountName)
+        {
+            return !string.IsNullOrEmpty(accountName);
+        }
+
+        /// <summary> Проверяет валидный ли балан для счёта. </summary>
+        /// <param name="accountBalance"> Баланс аккаунта. </param>
+        /// <param name="balance"> Баланс аккаунта типа double, если строка с балансом валидная. </param>
+        /// <returns> Возращает true, если баланс счёта валидный, иначе false. </returns>
+        private bool IsValidAccountBalance(string accountBalance, out double balance)
+        {
+            return double.TryParse(accountBalance, out balance);
+        }
+
         /// <summary> Проверяет валидная ли валюта для счёта. </summary>
         /// <param name="accountCurrency"> Валюта счёта. </param>
         /// <returns> Возращает true, если валюта счёта валидное, иначе false. </returns>
@@ -195,5 +193,6 @@ namespace UpCash.Menus
         {
             return !string.IsNullOrEmpty(accountCurrency);
         }
+        #endregion
     }
 }
