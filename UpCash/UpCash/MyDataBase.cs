@@ -17,9 +17,45 @@ namespace UpCash
         {
             if (!File.Exists(DBName))
             {
-                // TODO: СОЗДАЙ ВСЕ ТАБЛИЦЫ
+                InitializeDatabase();
                 File.SetAttributes(DBName, FileAttributes.Hidden);
             }
+        }
+
+        private void InitializeDatabase()
+        {
+            // Создание таблицы Account
+            ExecuteQueryWithoutAnswer("CREATE TABLE Account" +
+                "(name TEXT NOT NULL," +
+                "balance REAL NOT NULL," +
+                "currency  TEXT NOT NULL," +
+                "PRIMARY KEY(name)," +
+                "FOREIGN KEY(currency) REFERENCES Currency(code));");
+
+            // Создание таблицы Currency
+            ExecuteQueryWithoutAnswer("CREATE TABLE Currency" +
+                "(code TEXT NOT NULL," +
+                "name TEXT NOT NULL," +
+                "PRIMARY KEY(code));");
+
+            // Создание таблицы Item
+            ExecuteQueryWithoutAnswer("CREATE TABLE Item" +
+                "(name_item TEXT NOT NULL," +
+                "type_item TEXT NOT NULL," +
+                "FOREIGN KEY(type_item) REFERENCES TypeItem(type_item)," +
+                "PRIMARY KEY(name_item));");
+
+            // Создание таблицы SubItem
+            ExecuteQueryWithoutAnswer("CREATE TABLE SubItem" +
+                "(name_sub_item TEXT NOT NULL," +
+                "name_item TEXT NOT NULL," +
+                "FOREIGN KEY(name_item) REFERENCES Item(name_item)," +
+                "PRIMARY KEY(name_sub_item));");
+
+            // Создание таблицы TypeItem
+            ExecuteQueryWithoutAnswer("CREATE TABLE TypeItem" +
+                "(type_item TEXT NOT NULL," +
+                "PRIMARY KEY(type_item));");
         }
 
         /// <summary> Возвращает объект базы данных. </summary>

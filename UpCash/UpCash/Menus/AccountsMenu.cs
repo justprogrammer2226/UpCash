@@ -29,7 +29,6 @@ namespace UpCash.Menus
             return _instance;
         }
 
-        #region Implementing menu options
         /// <summary> Показывает меню списка счётов. </summary>
         private void ShowListOfAccounts()
         {
@@ -58,7 +57,7 @@ namespace UpCash.Menus
             }
             catch (SQLiteException)
             {
-                Console.WriteLine("Счёт не был добавлен. Вероятно вы ввели имя существующего счёта или указали несуществующий код валюты.");
+                Console.WriteLine("Счёт не был добавлен. Вероятно вы ввели имя существующего счёта, указали несуществующий код валюты. Если же вы первый раз запустили приложение, вы должны добавить валюту.");
                 ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
             }
         }
@@ -79,7 +78,6 @@ namespace UpCash.Menus
                 ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
             }
         }
-        #endregion
 
         /// <summary> Выводит список всех счётов. </summary>
         private void ShowAccounts()
