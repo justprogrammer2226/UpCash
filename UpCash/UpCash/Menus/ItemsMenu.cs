@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SQLite;
+using ConsoleHelper;
 
 namespace UpCash.Menus
 {
@@ -13,8 +15,8 @@ namespace UpCash.Menus
         {
             Options = new List<Option>()
             {
-                new Option("Посмотреть статьи доходов", () => ShowItems("Доход")),
-                new Option("Посмотреть статьи расходов", () => ShowItems("Расход")),
+                new Option("Посмотреть статьи доходов", () => ShowListOfItems("Доход")),
+                new Option("Посмотреть статьи расходов", () => ShowListOfItems("Расход")),
                 new Option("Добавить статью дохода", () => ShowAddItemMenu("Доход")),
                 new Option("Добавить статью расхода", () => ShowAddItemMenu("Расход")),
                 new Option("Удалить статью", ShowDeleteItemMenu),
@@ -30,11 +32,19 @@ namespace UpCash.Menus
 
         /// <summary> Показывает статьи типа type. </summary>
         /// <param name="type"> Тип статьи, которую нужно показать. </param>
-        private void ShowItems(string type)
+        private void ShowListOfItems(string type)
         {
             Console.Clear();
             Console.WriteLine($"Статьи типа {type.ToLower()}:");
 
+            ShowItems(type);
+
+            Console.WriteLine("Нажмите любую клавишу, что б вернуться.");
+            Console.ReadKey();
+        }
+
+        private void ShowItems(string type)
+        {
             // Если пунктов нет, то вернёт объект, с 0 строк, а не null.
             DataTable items = MyDataBase.GetDB().GetTable($"SELECT name_item FROM Item WHERE type_item = '{type}';");
 
@@ -50,9 +60,6 @@ namespace UpCash.Menus
                     Console.WriteLine($"  {i + 1}.{j + 1}. {subItems.Rows[j]["name_sub_item"].ToString()}");
                 }
             }
-
-            Console.WriteLine("Нажмите любую клавишу, что б вернуться.");
-            Console.ReadKey();
         }
 
         /// <summary> Открывает меню добавление элемента в статью типа type. </summary>
@@ -62,7 +69,7 @@ namespace UpCash.Menus
             Console.Clear();
             Console.WriteLine($"Введите имя статьи типа {type.ToLower()} которую хотите добавить.");
 
-            string itemName = Console.ReadLine();
+            string itemName = GetItemName();
 
             Console.WriteLine("Если вы хотите, что б эта статья была вложеной, введите имя главной статьи, иначе просто нажмите Enter.");
 
@@ -70,15 +77,41 @@ namespace UpCash.Menus
 
             if (string.IsNullOrEmpty(mainItemName))
             {
-                MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"INSERT INTO Item VALUES ('{itemName}', '{type}');");
+                try
+                {
+                    MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"INSERT INTO Item VALUES ('{itemName}', '{type}');");
+                    Console.WriteLine("Статья успешно добавлена.");
+                    Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
+                    Console.ReadKey();
+                    return;
+                }
+                catch (SQLiteException)
+                {
+                    Console.WriteLine("Статья не была добавлена. Вероятно вы ввели имя существующей статьи.");
+                    Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
+                    Console.ReadKey();
+                }
             }
             else
             {
                 string typeOfMainItem = MyDataBase.GetDB().ExecuteQueryWithAnswer($"SELECT type_item FROM Item WHERE name_item = '{mainItemName}'");
 
-                if (MyDataBase.GetDB().ExecuteQueryWithAnswer($"SELECT type_item FROM Item WHERE name_item = '{mainItemName}'") == type)
+                if (typeOfMainItem == type)
                 {
-                    MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"INSERT INTO SubItem VALUES ('{itemName}', '{mainItemName}');");
+                    try
+                    {
+                        MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"INSERT INTO SubItem VALUES ('{itemName}', '{mainItemName}');");
+                        Console.WriteLine("Статья успешно добавлена.");
+                        Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
+                        Console.ReadKey();
+                        return;
+                    }
+                    catch (SQLiteException)
+                    {
+                        Console.WriteLine("Статья не была добавлена. Вероятно вы ввели имя существующей статьи.");
+                        Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
+                        Console.ReadKey();
+                    }
                 }
                 else if (typeOfMainItem == null)
                 {
@@ -95,10 +128,6 @@ namespace UpCash.Menus
                     return;
                 }
             }
-
-            Console.WriteLine($"Статья типа {type.ToLower()} успешно добавлена.");
-            Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-            Console.ReadKey();
         }
 
         /// <summary> Поазывает меню удаления удаления статьи. </summary>
@@ -107,7 +136,7 @@ namespace UpCash.Menus
             Console.Clear();
             Console.WriteLine($"Введите имя статьи которую хотите удалить.");
 
-            string itemName = Console.ReadLine();
+            string itemName = GetItemName();
 
             bool isItemExist = MyDataBase.GetDB().ExecuteQueryWithAnswer($"SELECT name_item FROM Item WHERE name_item = '{itemName}';") != null ? true : false;
 
@@ -147,6 +176,23 @@ namespace UpCash.Menus
             Console.WriteLine($"Статья {itemName} успешно удалена.");
             Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
             Console.ReadKey();
+        }
+
+        private string GetItemName()
+        {
+            return ConsoleInput.GetInput("Введите имя статьи.", true, () =>
+            {
+                Console.WriteLine($"Статьи типа доход:");
+                ShowItems("Доход");
+                Console.WriteLine($"Статьи типа расход:");
+                ShowItems("Расход");
+                Console.WriteLine();
+            }, () =>
+            {
+                Console.WriteLine("Вы должны ввести валидное имя статьи.");
+                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
+                Console.ReadKey();
+            });
         }
     }
 }

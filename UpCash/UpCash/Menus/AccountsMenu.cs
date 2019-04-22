@@ -33,6 +33,7 @@ namespace UpCash.Menus
         private void ShowListOfAccounts()
         {
             Console.Clear();
+            Console.WriteLine("Список счетов:");
             ShowAccounts();
             Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
             Console.ReadKey();
@@ -41,39 +42,46 @@ namespace UpCash.Menus
         /// <summary> Показывает меню для добавления счёта. </summary>
         private void ShowAddAccountMenu()
         {
-            while (true)
+            Console.Clear();
+            Console.WriteLine("Список счетов:");
+            ShowAccounts();
+
+            string accountName = GetAccountName();
+            double accountBalance = GetAccounBalance();
+            string accountCurrency = GetAccounCurrency();
+
+            try
             {
-                Console.Clear();
-
-                string accountName = GetAccountName();
-                double accountBalance = GetAccounBalance();
-                string accountCurrency = GetAccounCurrency();
-
-                try
-                {
-                    MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"INSERT INTO Account VALUES ('{accountName}', '{accountBalance}', '{accountCurrency}');");
-                    Console.WriteLine("Счёта успешно добавлен.");
-                    Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                    Console.ReadKey();
-                    break;
-                }
-                catch (SQLiteException)
-                {
-                    Console.WriteLine("Счёт не был добавлен. Вероятно вы ввели имя существующего баланса или ввели неправильное имя счёта.");
-                    Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                    Console.ReadKey();
-                }
+                MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"INSERT INTO Account VALUES ('{accountName}', '{accountBalance}', '{accountCurrency}');");
+                Console.WriteLine("Счёта успешно добавлен.");
+                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
+                Console.ReadKey();
+            }
+            catch (SQLiteException)
+            {
+                Console.WriteLine("Счёт не был добавлен. Вероятно вы ввели имя существующего счёта или указали несуществующий код валюты.");
+                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
+                Console.ReadKey();
             }
         }
 
         /// <summary> Показывает меню для удаления счётов. </summary>
         private void ShowDeleteAccountMenu()
         {
-            Console.Clear();
-            MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"DELETE FROM Account WHERE name = '{GetAccountName()}';");
-            Console.WriteLine("Счёт успешно удалён.");
-            Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-            Console.ReadKey();
+            try
+            {
+                Console.Clear();
+                MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"DELETE FROM Account WHERE name = '{GetAccountName()}';");
+                Console.WriteLine("Счёт успешно удалён.");
+                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
+                Console.ReadKey();
+            }
+            catch (SQLiteException)
+            {
+                Console.WriteLine("Счёт не был удален. Вероятно, есть операции, которые ссылаются на эту валюту.");
+                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
+                Console.ReadKey();
+            }
         }
         #endregion
 
