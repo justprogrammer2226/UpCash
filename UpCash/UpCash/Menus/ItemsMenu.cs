@@ -36,11 +36,8 @@ namespace UpCash.Menus
         {
             Console.Clear();
             Console.WriteLine($"Статьи типа {type.ToLower()}:");
-
             ShowItems(type);
-
-            Console.WriteLine("Нажмите любую клавишу, что б вернуться.");
-            Console.ReadKey();
+            ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
         }
 
         private void ShowItems(string type)
@@ -81,15 +78,13 @@ namespace UpCash.Menus
                 {
                     MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"INSERT INTO Item VALUES ('{itemName}', '{type}');");
                     Console.WriteLine("Статья успешно добавлена.");
-                    Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                    Console.ReadKey();
+                    ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
                     return;
                 }
                 catch (SQLiteException)
                 {
                     Console.WriteLine("Статья не была добавлена. Вероятно вы ввели имя существующей статьи.");
-                    Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                    Console.ReadKey();
+                    ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
                 }
             }
             else
@@ -102,29 +97,25 @@ namespace UpCash.Menus
                     {
                         MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"INSERT INTO SubItem VALUES ('{itemName}', '{mainItemName}');");
                         Console.WriteLine("Статья успешно добавлена.");
-                        Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                        Console.ReadKey();
+                        ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
                         return;
                     }
                     catch (SQLiteException)
                     {
                         Console.WriteLine("Статья не была добавлена. Вероятно вы ввели имя существующей статьи.");
-                        Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                        Console.ReadKey();
+                        ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
                     }
                 }
                 else if (typeOfMainItem == null)
                 {
                     Console.WriteLine("Данной главной статьи не существует, введите статью которая существует.");
-                    Console.WriteLine("Нажмите любую клавишу, что б вернуться в предыдущее меню..");
-                    Console.ReadKey();
+                    ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
                     return;
                 }
                 else
                 {
                     Console.WriteLine($"Вы собираетесь добавить статью типа {type.ToUpper()}, но в качестве главного элемента указали статью другого типа.");
-                    Console.WriteLine("Нажмите любую клавишу, что б вернуться в предыдущее меню..");
-                    Console.ReadKey();
+                    ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
                     return;
                 }
             }
@@ -167,31 +158,28 @@ namespace UpCash.Menus
                 else
                 {
                     Console.WriteLine("Данной статьи не существует.");
-                    Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                    Console.ReadKey();
+                    ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
                     return;
                 }
             }
 
             Console.WriteLine($"Статья {itemName} успешно удалена.");
-            Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-            Console.ReadKey();
+            ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
         }
 
         private string GetItemName()
         {
-            return ConsoleInput.GetInput("Введите имя статьи.", true, () =>
+            return ConsoleInput.GetInput("Введите имя статьи.", returnValidInput: true, action: () =>
             {
                 Console.WriteLine($"Статьи типа доход:");
                 ShowItems("Доход");
                 Console.WriteLine($"Статьи типа расход:");
                 ShowItems("Расход");
                 Console.WriteLine();
-            }, () =>
+            }, errorNotification: () =>
             {
                 Console.WriteLine("Вы должны ввести валидное имя статьи.");
-                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                Console.ReadKey();
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
             });
         }
     }

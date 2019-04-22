@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleHelper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
@@ -32,8 +33,7 @@ namespace UpCash.Menus
             Console.Clear();
             Console.WriteLine("Список валют:");
             ShowCurrencies();
-            Console.WriteLine("Нажмите любую клавишу, что б вернуться.");
-            Console.ReadKey();
+            ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
         }
 
         private void ShowCurrencies()
@@ -58,14 +58,12 @@ namespace UpCash.Menus
             {
                 MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"INSERT INTO Currency VALUES ('{codeCurrency}', '{nameCurrency}');");
                 Console.WriteLine("Валюта успешно добавлена.");
-                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                Console.ReadKey();
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
             }
             catch (SQLiteException)
             {
                 Console.WriteLine("Валюта не была добавлена. Вероятно вы ввели имя существующеей валюты");
-                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                Console.ReadKey();
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
             }
         }
 
@@ -76,71 +74,43 @@ namespace UpCash.Menus
                 Console.Clear();
                 MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"DELETE FROM Currency WHERE code = '{GetCodeCurrency()}';");
                 Console.WriteLine("Счёт успешно удалён.");
-                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                Console.ReadKey();
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
             }
             catch (SQLiteException)
             {
                 Console.WriteLine("Валюта не была удалена. Вероятно, есть счета, которые ссылаются на эту валюту.");
-                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                Console.ReadKey();
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
             }
         }
 
         private string GetCodeCurrency()
         {
-            string codeCurrency;
-            while (true)
+            return ConsoleInput.GetInput("Введите код валюты.", returnValidInput: true, action: () =>
             {
                 Console.Clear();
                 Console.WriteLine("Список валют:");
                 ShowCurrencies();
-
-                Console.WriteLine("Введите код валюты.");
-                codeCurrency = Console.ReadLine();
-
-                if (IsValidCodeCurrency(codeCurrency)) break;
-                else
-                {
-                    Console.WriteLine("Вы должны ввести валидный код валюты.");
-                    Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                    Console.ReadKey();
-                }
-            }
-            return codeCurrency;
+                Console.WriteLine();
+            }, errorNotification: () =>
+            {
+                Console.WriteLine("Вы должны ввести валидный код валюты.");
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
+            });
         }
 
         private string GetNameCurrency()
         {
-            string nameCurrency;
-            while (true)
+            return ConsoleInput.GetInput("Введите имя валюты.", returnValidInput: true, action: () =>
             {
                 Console.Clear();
                 Console.WriteLine("Список валют:");
                 ShowCurrencies();
-
-                Console.WriteLine("Введите имя валюты.");
-                nameCurrency = Console.ReadLine();
-
-                if (IsValidNameCurrency(nameCurrency)) break;
-                else
-                {
-                    Console.WriteLine("Вы должны ввести валидное имя валюты.");
-                    Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                    Console.ReadKey();
-                }
-            }
-            return nameCurrency;
-        }
-
-        private bool IsValidCodeCurrency(string codeCurrency)
-        {
-            return !string.IsNullOrEmpty(codeCurrency);
-        }
-
-        private bool IsValidNameCurrency(string nameCurrency)
-        {
-            return !string.IsNullOrEmpty(nameCurrency);
+                Console.WriteLine();
+            }, errorNotification: () =>
+            {
+                Console.WriteLine("Вы должны ввести валидное имя валюты.");
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
+            });
         }
     }
 }

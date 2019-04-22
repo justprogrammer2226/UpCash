@@ -1,13 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleHelper
 {
     public static class ConsoleInput
     {
+        /// <summary> Обрабатывает ввод пользователя. </summary>
+        /// <param name="title"> Заголовок, который будет отображено перед запросом на ввод. </param>
+        /// <param name="returnValidInput"> Если true, то метод будет выполняться до тех пор, пока не будет введено валидное значение.
+        /// Если false, метод приймет только 1 ввод пользователя, не зависимо от того, коректный он или нет. </param>
+        /// <param name="action"> Действие, которое нужно выполнить, до отображение заголовка. </param>
+        /// <param name="errorNotification"> Действие, которое нужно выполнить, при вводе невалидных данных. </param>
+        /// <returns></returns>
         public static string GetInput(string title, bool returnValidInput = true, Action action = null, Action errorNotification = null)
         {
             string input;
@@ -41,63 +44,40 @@ namespace ConsoleHelper
             return !string.IsNullOrEmpty(input);
         }
 
-        //private static string GetNameCurrency()
-        //{
-        //    string nameCurrency;
-        //    while (true)
-        //    {
-        //        Console.Clear();
-        //        Console.WriteLine("Список валют:");
-        //        ShowCurrencies();
+        /// <summary> Обрабатывает ввод пользователя. </summary>
+        /// <param name="title"> Заголовок, который будет отображено перед запросом на ввод. </param>
+        /// <param name="action"> Действие, которое нужно выполнить, до отображение заголовка. </param>
+        /// <param name="errorNotification"> Действие, которое нужно выполнить, при вводе невалидных данных. </param>
+        /// <returns></returns>
+        public static double GetInput(string title, Action action = null, Action errorNotification = null)
+        {
+            double result;
+            string input;
+            while(true)
+            {
+                // Очищаем консоль и выполняем action, если он есть.
+                Console.Clear();
+                action?.Invoke();
 
-        //        Console.WriteLine("Введите имя валюты.");
-        //        nameCurrency = Console.ReadLine();
+                // Выводим заголовок, если он есть и принимаем ввод пользователя.
+                if (title != null) Console.WriteLine(title);
+                input = Console.ReadLine();
 
-        //        if (IsValidNameCurrency(nameCurrency)) break;
-        //        else
-        //        {
-        //            Console.WriteLine("Вы должны ввести валидное имя валюты.");
-        //            Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-        //            Console.ReadKey();
-        //        }
-        //    }
-        //    return nameCurrency;
-        //}
+                // Мы проверяем строку на валидность.
+                // Если строка валидная, прекращаем ввод, иначе выводим сообщение о ошибке.
+                if (IsValidInput(input, out result)) break;
+                else errorNotification?.Invoke();
+            }
+            return result;
+        }
 
-        //private double GetAccounBalance()
-        //{
-        //    string accountBalance;
-        //    double balance;
-        //    while (true)
-        //    {
-        //        Console.Clear();
-
-        //        Console.WriteLine("Список аккаунтов:");
-        //        ShowAccounts();
-        //        Console.WriteLine();
-
-        //        Console.WriteLine("Введите баланс счёта.");
-        //        accountBalance = Console.ReadLine();
-
-        //        if (IsValidAccountBalance(accountBalance, out balance)) break;
-        //        else
-        //        {
-        //            Console.WriteLine("Вы ввели некорректный баланс счёта.");
-        //            Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-        //            Console.ReadKey();
-        //        }
-        //    }
-        //    return balance;
-        //}
-
-        //private static bool IsValidCodeCurrency(string codeCurrency)
-        //{
-        //    return !string.IsNullOrEmpty(codeCurrency);
-        //}
-
-        //private bool IsValidAccountBalance(string accountBalance, out double balance)
-        //{
-        //    return double.TryParse(accountBalance, out balance);
-        //}
+        /// <summary> Проверяет строку input на валидность и, если строка валидная, число с неё будет в result. </summary>
+        /// <param name="input"> Строка, которую нужно проверить на валидность. </param>
+        /// <param name="result"> Если строка будет валидной, число из неё запишиться в эту переменную. </param>
+        /// <returns> Возращает true, если строка input конвертируеться в double. </returns>
+        public static bool IsValidInput(string input, out double result)
+        {
+            return double.TryParse(input, out result);
+        }
     }
 }

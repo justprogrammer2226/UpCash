@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleHelper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
@@ -35,8 +36,7 @@ namespace UpCash.Menus
             Console.Clear();
             Console.WriteLine("Список счетов:");
             ShowAccounts();
-            Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-            Console.ReadKey();
+            ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
         }
 
         /// <summary> Показывает меню для добавления счёта. </summary>
@@ -54,14 +54,12 @@ namespace UpCash.Menus
             {
                 MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"INSERT INTO Account VALUES ('{accountName}', '{accountBalance}', '{accountCurrency}');");
                 Console.WriteLine("Счёта успешно добавлен.");
-                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                Console.ReadKey();
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
             }
             catch (SQLiteException)
             {
                 Console.WriteLine("Счёт не был добавлен. Вероятно вы ввели имя существующего счёта или указали несуществующий код валюты.");
-                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                Console.ReadKey();
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
             }
         }
 
@@ -73,14 +71,12 @@ namespace UpCash.Menus
                 Console.Clear();
                 MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"DELETE FROM Account WHERE name = '{GetAccountName()}';");
                 Console.WriteLine("Счёт успешно удалён.");
-                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                Console.ReadKey();
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
             }
             catch (SQLiteException)
             {
                 Console.WriteLine("Счёт не был удален. Вероятно, есть операции, которые ссылаются на эту валюту.");
-                Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                Console.ReadKey();
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
             }
         }
         #endregion
@@ -99,108 +95,47 @@ namespace UpCash.Menus
         /// <summary> Возращает имя счёта, введённого пользователем. </summary>
         private string GetAccountName()
         {
-            string accountName;
-            while (true)
+            return ConsoleInput.GetInput("Введите имя счёта.", returnValidInput: true, action: () =>
             {
-                Console.Clear();
-
-                Console.WriteLine("Список аккаунтов:");
+                Console.WriteLine("Список счётов:");
                 ShowAccounts();
                 Console.WriteLine();
-
-                Console.WriteLine("Введите имя счёта.");
-                accountName = Console.ReadLine();
-
-                if (IsValidAccountName(accountName)) break;
-                else
-                {
-                    Console.WriteLine("Вы должны ввести валидное имя счёта");
-                    Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                    Console.ReadKey();
-                }
-            }
-            return accountName;
+            }, errorNotification: () =>
+            {
+                Console.WriteLine("Вы должны ввести валидное имя счёта");
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
+            });
         }
 
         /// <summary> Возращает баланс счёта, введённого пользователем. </summary>
         private double GetAccounBalance()
         {
-            string accountBalance;
-            double balance;
-            while (true)
+            return ConsoleInput.GetInput("Введите баланс счёта.", action: () =>
             {
-                Console.Clear();
-
-                Console.WriteLine("Список аккаунтов:");
+                Console.WriteLine("Список счётов:");
                 ShowAccounts();
                 Console.WriteLine();
-
-                Console.WriteLine("Введите баланс счёта.");
-                accountBalance = Console.ReadLine();
-
-                if (IsValidAccountBalance(accountBalance, out balance)) break;
-                else
-                {
-                    Console.WriteLine("Вы ввели некорректный баланс счёта.");
-                    Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                    Console.ReadKey();
-                }
-            }
-            return balance;
+            }, errorNotification: () =>
+            {
+                Console.WriteLine("Вы должны ввести валидное баланс счёта");
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
+            });
         }
 
         /// <summary> Возращает валюту счёта, введённого пользователем. </summary>
         /// <param name="action"> Действие, которое будет выполнено, после отчистки. </param>
         private string GetAccounCurrency()
         {
-            string accountCurrency;
-            while (true)
+            return ConsoleInput.GetInput("Введите валюту счёта.", returnValidInput: true, action: () =>
             {
-                Console.Clear();
-
-                Console.WriteLine("Список аккаунтов:");
+                Console.WriteLine("Список счётов:");
                 ShowAccounts();
                 Console.WriteLine();
-
-                Console.WriteLine("Введите валюту счёта.");
-                accountCurrency = Console.ReadLine();
-
-                if (IsValidAccountCurrency(accountCurrency)) break;
-                else
-                {
-                    Console.WriteLine("Вы должны ввести имя счёта, а не просто нажать Enter.");
-                    Console.WriteLine("Нажмите любую клавишу, что б закрыть это меню.");
-                    Console.ReadKey();
-                }
-            }
-            return accountCurrency;
+            }, errorNotification: () =>
+            {
+                Console.WriteLine("Вы должны ввести валидную валюту счёта.");
+                ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
+            });
         }
-
-        #region Validation
-        /// <summary> Проверяет валидное ли имя для счёта. </summary>
-        /// <param name="accountName"> Имя счёта. </param>
-        /// <returns> Возращает true, если имя счёта валидное, иначе false. </returns>
-        private bool IsValidAccountName(string accountName)
-        {
-            return !string.IsNullOrEmpty(accountName);
-        }
-
-        /// <summary> Проверяет валидный ли балан для счёта. </summary>
-        /// <param name="accountBalance"> Баланс аккаунта. </param>
-        /// <param name="balance"> Баланс аккаунта типа double, если строка с балансом валидная. </param>
-        /// <returns> Возращает true, если баланс счёта валидный, иначе false. </returns>
-        private bool IsValidAccountBalance(string accountBalance, out double balance)
-        {
-            return double.TryParse(accountBalance, out balance);
-        }
-
-        /// <summary> Проверяет валидная ли валюта для счёта. </summary>
-        /// <param name="accountCurrency"> Валюта счёта. </param>
-        /// <returns> Возращает true, если валюта счёта валидное, иначе false. </returns>
-        private bool IsValidAccountCurrency(string accountCurrency)
-        {
-            return !string.IsNullOrEmpty(accountCurrency);
-        }
-        #endregion
     }
 }
