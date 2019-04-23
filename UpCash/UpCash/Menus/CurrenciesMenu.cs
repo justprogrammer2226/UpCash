@@ -28,6 +28,7 @@ namespace UpCash.Menus
             return _instance;
         }
 
+        /// <summary> Показывает меню вывода валют. </summary>
         private void ShowCurrenciesOutputMenu()
         {
             Console.Clear();
@@ -36,6 +37,7 @@ namespace UpCash.Menus
             ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
         }
 
+        /// <summary> Выводит список валют. </summary>
         private void ShowCurrencies()
         {
             DataTable currencies = MyDataBase.GetDB().GetTable("SELECT code, name FROM Currency;");
@@ -45,6 +47,7 @@ namespace UpCash.Menus
             }
         }
 
+        /// <summary> Выводит меню добавления валюты. </summary>
         private void ShowAddCurrencyMenu()
         {
             Console.Clear();
@@ -67,13 +70,14 @@ namespace UpCash.Menus
             }
         }
 
+        /// <summary> Выводит меню удаления валюты. </summary>
         private void ShowDeleteCurrencyMenu()
         {
             try
             {
                 Console.Clear();
                 MyDataBase.GetDB().ExecuteQueryWithoutAnswer($"DELETE FROM Currency WHERE code = '{GetCodeCurrency()}';");
-                Console.WriteLine("Счёт успешно удалён.");
+                Console.WriteLine("Валюта успешно удалена.");
                 ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
             }
             catch (SQLiteException)
@@ -83,6 +87,7 @@ namespace UpCash.Menus
             }
         }
 
+        /// <summary> Возращает код валюты, введённой пользователем. </summary>
         private string GetCodeCurrency()
         {
             return ConsoleInput.GetInput("Введите код валюты.", returnValidInput: true, action: () =>
@@ -98,6 +103,7 @@ namespace UpCash.Menus
             });
         }
 
+        /// <summary> Возращает имя валюты, введённой пользователем. </summary>
         private string GetNameCurrency()
         {
             return ConsoleInput.GetInput("Введите имя валюты.", returnValidInput: true, action: () =>

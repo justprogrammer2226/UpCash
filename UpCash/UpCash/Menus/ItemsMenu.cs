@@ -40,6 +40,8 @@ namespace UpCash.Menus
             ConsoleOutput.PressAnyKeyToContinue("Нажмите любую клавишу, что б закрыть это меню.");
         }
 
+        /// <summary> Показывает все статьи типа type. </summary>
+        /// <param name="type"> Тип статей, которые нужно отобразить. </param>
         private void ShowItems(string type)
         {
             // Если пунктов нет, то вернёт объект, с 0 строк, а не null.

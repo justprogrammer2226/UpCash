@@ -124,7 +124,7 @@ namespace UpCash.Menus
         /// <param name="action"> Действие, которое будет выполнено, после отчистки. </param>
         private string GetAccounCurrency()
         {
-            return ConsoleInput.GetInput("Введите валюту счёта.", returnValidInput: true, action: () =>
+            return ConsoleInput.GetInput("Введите код валюты счёта.", returnValidInput: true, action: () =>
             {
                 Console.WriteLine("Список счётов:");
                 ShowAccounts();

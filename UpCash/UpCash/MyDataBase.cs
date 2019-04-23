@@ -56,6 +56,11 @@ namespace UpCash
             ExecuteQueryWithoutAnswer("CREATE TABLE TypeItem" +
                 "(type_item TEXT NOT NULL," +
                 "PRIMARY KEY(type_item));");
+
+            // Создание таблицы TypeItem
+            ExecuteQueryWithoutAnswer("INSERT INTO TypeItem VALUES" +
+                "('Расход')," +
+                "('Доход');");
         }
 
         /// <summary> Возвращает объект базы данных. </summary>
