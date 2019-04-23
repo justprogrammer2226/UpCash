@@ -1,8 +1,6 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Data.SQLite;
 using System.IO;
-using System.Reflection;
 
 namespace UpCash
 {
@@ -57,7 +55,19 @@ namespace UpCash
                 "(type_item TEXT NOT NULL," +
                 "PRIMARY KEY(type_item));");
 
-            // Создание таблицы TypeItem
+            // Создание таблицы Operation
+            ExecuteQueryWithoutAnswer("CREATE TABLE Operation" +
+                "(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                "accountName TEXT NOT NULL," +
+                "value REAL NOT NULL CHECK(value > 0)," +
+                "item TEXT," +
+                "sub_item TEXT," +
+                "date TEXT NOT NULL," +
+                "FOREIGN KEY(accountName) REFERENCES Account(name)," +
+                "FOREIGN KEY(item) REFERENCES Item(name_item)," +
+                "FOREIGN KEY(sub_item) REFERENCES SubItem(name_sub_item));");
+
+            // Вставка значений в таблицу TypeItem
             ExecuteQueryWithoutAnswer("INSERT INTO TypeItem VALUES" +
                 "('Расход')," +
                 "('Доход');");
@@ -106,11 +116,12 @@ namespace UpCash
             OpenConnection();
 
             _command.CommandText = query;
-            string answer = _command.ExecuteScalar() as string;
+
+            object answer = _command.ExecuteScalar();
 
             CloseConnection();
 
-            return answer;
+            return answer?.ToString();
         }
 
         /// <summary> Этот метод возваращает таблицу, которая являеться результатом выборки запроса query. </summary>

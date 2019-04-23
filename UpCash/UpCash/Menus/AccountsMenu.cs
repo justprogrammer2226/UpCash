@@ -80,7 +80,7 @@ namespace UpCash.Menus
         }
 
         /// <summary> Выводит список всех счётов. </summary>
-        private void ShowAccounts()
+        public void ShowAccounts()
         {
             DataTable accounts = MyDataBase.GetDB().GetTable("SELECT name, balance, currency FROM Account;");
 

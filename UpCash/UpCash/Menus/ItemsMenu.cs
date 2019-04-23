@@ -42,7 +42,7 @@ namespace UpCash.Menus
 
         /// <summary> Показывает все статьи типа type. </summary>
         /// <param name="type"> Тип статей, которые нужно отобразить. </param>
-        private void ShowItems(string type)
+        public void ShowItems(string type)
         {
             // Если пунктов нет, то вернёт объект, с 0 строк, а не null.
             DataTable items = MyDataBase.GetDB().GetTable($"SELECT name_item FROM Item WHERE type_item = '{type}';");
